@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: "Kweichow Moutai Net Profit Econometric Analysis"
+message: "If you use this repository for coursework, teaching or reproducibility examples, please cite it as below."
+type: software
+authors:
+  - family-names: "Wang"
+    given-names: "Gang"
+abstract: "A reproducible econometrics project for Kweichow Moutai net profit analysis using ADF tests, Engle-Granger cointegration and an Error Correction Model."
+keywords:
+  - econometrics
+  - time series
+  - cointegration
+  - error correction model
+  - Kweichow Moutai
+license: MIT
+version: 1.0.0
+date-released: 2026-05-26

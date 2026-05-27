@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+.env
+.venv/
+venv/
+*.log
+*.tmp
+
+# Generated outputs are ignored by default in Git, but .gitkeep keeps folders visible.
+outputs/figures/*.png
+outputs/tables/*.csv
+outputs/tables/*.xlsx
+outputs/models/*.txt
+outputs/models/*.log
+!outputs/figures/.gitkeep
+!outputs/tables/.gitkeep
+!outputs/models/.gitkeep
+
+data/processed/*.csv
+!data/processed/.gitkeep
