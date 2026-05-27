@@ -20,3 +20,4 @@ outputs/models/*.log
 
 data/processed/*.csv
 !data/processed/.gitkeep
+report
