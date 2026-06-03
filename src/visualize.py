@@ -40,10 +40,11 @@ def plot_log_scatter_matrix(df: pd.DataFrame) -> None:
     plt.close(fig)
 
 
-def plot_actual_fitted_ecm(df: pd.DataFrame) -> None:
+def plot_actual_fitted_ecm(df: pd.DataFrame, ecm: object | None = None, model_df: pd.DataFrame | None = None) -> None:
     """Plot actual and fitted DLNY from the ECM."""
     ensure_directories()
-    ecm, long_run, working, model_df = fit_ecm(df)
+    if ecm is None or model_df is None:
+        ecm, _long_run, _working, model_df = fit_ecm(df)
     model_df = model_df.copy()
     model_df["fitted_DLNY"] = ecm.fittedvalues
 
@@ -60,10 +61,11 @@ def plot_actual_fitted_ecm(df: pd.DataFrame) -> None:
     plt.close(fig)
 
 
-def plot_ecm_residuals(df: pd.DataFrame) -> None:
+def plot_ecm_residuals(df: pd.DataFrame, ecm: object | None = None, model_df: pd.DataFrame | None = None) -> None:
     """Plot ECM residuals over time."""
     ensure_directories()
-    ecm, long_run, working, model_df = fit_ecm(df)
+    if ecm is None or model_df is None:
+        ecm, _long_run, _working, model_df = fit_ecm(df)
 
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.axhline(0, linewidth=1)
@@ -77,14 +79,23 @@ def plot_ecm_residuals(df: pd.DataFrame) -> None:
     plt.close(fig)
 
 
-def export_figures(df: pd.DataFrame | None = None) -> None:
-    """Export all project figures."""
+def export_figures(
+    df: pd.DataFrame | None = None,
+    ecm: object | None = None,
+    model_df: pd.DataFrame | None = None,
+) -> None:
+    """Export all project figures.
+
+    When *ecm* and *model_df* are provided (from a prior
+    ``export_model_outputs`` call), the ECM-related plots reuse the
+    already-fitted model instead of re-estimating it.
+    """
     if df is None:
         df = pd.read_csv(DATA_PROCESSED)
     plot_level_trends(df)
     plot_log_scatter_matrix(df)
-    plot_actual_fitted_ecm(df)
-    plot_ecm_residuals(df)
+    plot_actual_fitted_ecm(df, ecm=ecm, model_df=model_df)
+    plot_ecm_residuals(df, ecm=ecm, model_df=model_df)
 
 
 def main() -> None:

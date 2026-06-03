@@ -12,13 +12,19 @@ def main() -> None:
     df = process_data()
 
     print("[2/4] Estimating long-run model, cointegration residual test and ECM...")
-    export_model_outputs(df)
+    models = export_model_outputs(df)
 
     print("[3/4] Running diagnostic tests and exporting tables...")
-    export_diagnostics(df)
+    export_diagnostics(
+        df,
+        ecm=models["ecm"],
+        long_run=models["long_run"],
+        working=models["working"],
+        model_df=models["model_df"],
+    )
 
     print("[4/4] Exporting figures...")
-    export_figures(df)
+    export_figures(df, ecm=models["ecm"], model_df=models["model_df"])
 
     print("Done. Results are available in data/processed and outputs/.")
 

@@ -106,8 +106,19 @@ def export_descriptive_tables(df: pd.DataFrame) -> None:
     df[LOG_COLUMNS].corr().to_csv(OUTPUT_TABLES / "correlation_matrix.csv", encoding="utf-8-sig")
 
 
-def export_diagnostics(df: pd.DataFrame | None = None) -> dict[str, pd.DataFrame]:
-    """Run and export all diagnostic outputs."""
+def export_diagnostics(
+    df: pd.DataFrame | None = None,
+    ecm: object | None = None,
+    working: pd.DataFrame | None = None,
+    model_df: pd.DataFrame | None = None,
+    long_run: object | None = None,
+) -> dict[str, pd.DataFrame]:
+    """Run and export all diagnostic outputs.
+
+    When *ecm*, *working*, *model_df* and *long_run* are provided
+    (e.g. from a prior ``export_model_outputs`` call) the long-run /
+    ECM estimation is skipped and the supplied objects are reused.
+    """
     ensure_directories()
     if df is None:
         df = pd.read_csv(DATA_PROCESSED)
@@ -116,7 +127,9 @@ def export_diagnostics(df: pd.DataFrame | None = None) -> dict[str, pd.DataFrame
     adf = adf_table(df, [*LOG_COLUMNS, *DIFF_COLUMNS], regression="c")
     adf.to_csv(OUTPUT_TABLES / "adf_tests.csv", index=False, encoding="utf-8-sig")
 
-    ecm, long_run, working, model_df = fit_ecm(df)
+    if ecm is None or working is None or model_df is None:
+        ecm, long_run, working, model_df = fit_ecm(df)
+
     vif = vif_table(model_df[[*EXOG_DIFF_COLUMNS, "ECM_L1"]])
     vif.to_csv(OUTPUT_TABLES / "vif.csv", index=False, encoding="utf-8-sig")
 

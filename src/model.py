@@ -83,7 +83,11 @@ def coefficients_table(result) -> pd.DataFrame:
 
 
 def export_model_outputs(df: pd.DataFrame | None = None) -> dict[str, object]:
-    """Fit models and export coefficient tables and text summaries."""
+    """Fit models and export coefficient tables and text summaries.
+
+    Returns a dict with keys ``ecm``, ``long_run``, ``working``, ``model_df``
+    so downstream callers can reuse the fitted models without re-estimating.
+    """
     ensure_directories()
     if df is None:
         df = load_processed_data()
@@ -105,6 +109,10 @@ def export_model_outputs(df: pd.DataFrame | None = None) -> dict[str, object]:
     (OUTPUT_MODELS / "ecm_summary.txt").write_text(ecm.summary().as_text(), encoding="utf-8")
 
     return {"ecm": ecm, "long_run": long_run, "working": working, "model_df": model_df}
+
+
+# Type alias for the fitted-model bundle returned by export_model_outputs / fit_ecm.
+EcmBundle = dict[str, object]
 
 
 def main() -> None:
